@@ -1,0 +1,61 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8" style="height:97vh; background-color:seagreen; margin-top:12px;">
+            <br />
+            <p class="Titillium text-left" style="font-size:60px; font-weight:400; color:white;">
+                &nbsp;&nbsp;Test Conference Room
+            </p>
+            <p class="Titillium text-left" style="font-size:350px; font-weight:300; color:white;">
+                OPEN
+            </p>
+            <br />
+            @*<p class="Titillium text-left" style="font-size:55px; font-weight:200; color:white;">
+                @Model.allMeetings[0].subject
+            </p>
+            <p class="Titillium text-left" style="font-size:50px; font-weight:lighter; color:white;">
+                @Model.allMeetings[0].start.ToString("MMMM d")&nbsp;@Model.allMeetings[0].start.ToString("hh:mm tt")&nbsp;-&nbsp;@Model.allMeetings[0].end.ToString("hh:mm tt")
+            </p>*@
+
+        </div>
+        <div class="col-md-4" style="background-color:white;">
+            <div class="text-center">
+                <img src="~/images/OMC_Banner_365.jpg" />
+            </div>
+
+
+            <br />
+            <div class="Titillium text-center" style="font-weight:300;font-size:72px;">@Model.nowtime</div>
+            <div class="Titillium text-center" style="font-weight:200; font-size:55px; color:dimgray;">@Model.nowday</div><br />
+
+
+
+
+
+            <p class="Titillium" style="font-size:45px; font-weight:lighter;">UPCOMING</p>
+            <table class="table border-top-0">
+                <tbody>
+
+
+                    @foreach (var meeting in Model.allMeetings)
+                    {
+                        <tr>
+
+                            <td class="Titillium text-left" style="font-size:18px; font-weight:400">@meeting.organizer&nbsp; -&nbsp;@meeting.subject</td>
+                            <td class="Titillium text-left" style="font-size:18px; font-weight:300">
+                                @meeting.start.ToString("ddd")&nbsp;
+                                @meeting.start.ToString("hh:mm tt")&nbsp; -&nbsp;
+                                @meeting.end.ToString("hh:mm tt")
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

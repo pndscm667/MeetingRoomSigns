@@ -1,0 +1,37 @@
+﻿
+.Titillium {
+    font-family: 'Titillium Web', serif;
+    font-weight: bolder;
+    font-size: 25px;
+    color: black;
+}
+
+.Montserrat {
+    font-family: 'Montserrat', sans-serif;
+    color: black;
+    font-size: 25px;
+    font-weight: bolder;
+}
+
+.Poiret {
+    font-family: 'Poiret One', cursive;
+    font-size: 25px;
+    color: black;
+    font-weight: bolder;
+}
+
+.Bree {
+    font-family: 'Bree Serif', serif;
+    font-size: 25px;
+    color: black;
+    font-weight: bolder;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+}
+
+p {
+    margin-bottom: 0px; /* To work-around bizarre margin-collapsing. */
+}
