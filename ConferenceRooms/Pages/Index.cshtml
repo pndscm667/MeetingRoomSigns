@@ -9,29 +9,31 @@
         <div class="col-md-8" style="height:97vh; background-color:white; margin-top:12px;">
             <br />
             <div class="jumbotron">
-                <img src="Images/OMC_Main_Logo.png" /><br /><br />
-                <p class="Titillium text-left" style="font-size:60px; font-weight:400; color:black;">
-                    @* &nbsp;&nbsp;Test Conference Room *@
-
-                    &nbsp;&nbsp;@Model.DisplayName
+                <img src="Images/OMC_Main_Logo.png" style="margin-left:auto;margin-right:auto;display:block;"/><br />
+                <p class="Titillium text-left" style="font-size:50px; font-weight:400; color:black;">
+                    @Model.DisplayName
                 </p>
+                <p class="Titillium text-left" style="font-size:30px; font-weight:200; color:dimgrey;">
+                    @Model.nowday
+                </p>
+
             </div>
-          
-         
-            <div class="Titillium text-left" style="font-weight:200; font-size:55px; color:dimgray;">@Model.nowday</div><br />
+
+
+           
 
 
 
 
 
-            <p class="Titillium" style="font-size:45px; font-weight:lighter;">UPCOMING</p>
+           
             <table class="table border-top-0">
                 <tbody>
                     <tr>
                         <td class="Titillium text-left" style="font-size:18px; font-weight:bold">Host</td>
                         <td class="Titillium text-left" style="font-size:18px; font-weight:bold">Meeting</td>
                         <td class="Titillium text-left" style="font-size:18px; font-weight:bold">Time</td>
-                   
+
 
 
                     </tr>
@@ -43,7 +45,7 @@
                         <td class="Titillium text-left" style="font-size:18px; font-weight:400">@meeting.organizer</td>
                         <td class="Titillium text-left" style="font-size:18px; font-weight:400">@meeting.subject</td>
                         <td class="Titillium text-left" style="font-size:18px; font-weight:300">
-                          
+
                             @meeting.start.ToString("hh:mm tt")&nbsp; -&nbsp;
                             @meeting.end.ToString("hh:mm tt")
                         </td>
@@ -52,6 +54,10 @@
                     }
                 </tbody>
             </table>
+            <p class="Titillium text-left" style="font-size:12pt; font-weight:normal; color:lightgray;">
+
+                &copy; @Model.nowyear - Olympic Medical Center
+            </p>
         </div>
         <div class="col-md-2"></div>
     </div>

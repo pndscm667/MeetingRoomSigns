@@ -23,6 +23,7 @@ namespace ConferenceRooms.Pages
         public List<Meeting> allMeetings { get; set; }
         public string nowtime = DateTime.Now.ToString("hh:mm tt");
         public string nowday = DateTime.Today.ToString("dddd, MMMM dd, yyyy ");
+        public string nowyear = DateTime.Today.ToString("yyyy");
         public string DisplayName { get; set; }
       
         public void OnGet()
