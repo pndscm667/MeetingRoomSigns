@@ -3,7 +3,7 @@ Displays events for M365 meeting rooms on a monitor outside the room.  Web serve
 
 ![alt text](https://github.com/pndscm667/MeetingRoomSigns/blob/master/ConferenceRooms/Screenshot/sign.jpg "Conference Room Sign")
 
-This is a quick razor pages website using ASP.NET 7, Microsoft Graph, C#, and a local SQL database for quote of the day.  We deployed the solution onto VMWare horizon kiosks mounted outside each meeting room.
+This is a quick razor pages website using ASP.NET 7, Microsoft Graph, C#, and a local SQL database for quote of the day.  We deployed the solution onto VMWare Horizon kiosks mounted outside each meeting room.
 When the kiosk boots up the login script examines the zero client name and if it is identified as a kiosk it reads a CSV that matches the kiosk to the meetingroom and opens the correct URL in Chrome Kiosk Mode.
 
 ## PowerShell Login Script:
