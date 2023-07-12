@@ -5,14 +5,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Graph;
-//using Microsoft.Graph.Auth;
-//using Microsoft.Identity.Client;
 using ConferenceRooms.Models;
 using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using System.Data;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using Microsoft.Extensions.Configuration;
 
 
 namespace ConferenceRooms.Pages
@@ -37,23 +33,21 @@ namespace ConferenceRooms.Pages
        
         public int quoteindex()
         { 
-            // Gotta get a quote
+            // Gotta get a quote - Should increment by one through 330 quotes
+
             TimeSpan tspan = DateTime.Today - new DateTime(1970, 1, 1);
-            // TimeSpan tspan = DateTime.Parse("3/18/2024") - new DateTime(1970, 1, 1);
             int daysSinceEpoch = (int)tspan.TotalDays;
             int index = (daysSinceEpoch % 330) + 1;
             return index;
         }
 
-        // Get the Quote of The Day from SQLPROD4
+        // Get the Quote of The Day from SQL
         public (string, string) QOTD()
         {
 
-            var connectionString = "Server=SQLPROD4;Database=QuoteOfTheDay;User Id=QOTD_reader;password=Wzrkg0}DcbxCjmPt[}0v;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;";
+            var connectionString = "Server=MySQLServer;Database=QuoteOfTheDay;User Id=QOTD_reader;password=xxxxxxx;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;";
             using SqlConnection connection = new SqlConnection(connectionString);
             {
-                
-
                 // First command to populate meeting info grid
 
                 using SqlCommand cmd = new SqlCommand("getQuote");
@@ -83,8 +77,8 @@ namespace ConferenceRooms.Pages
             // If it's debug then let's just give it a test conference room
             // If not then read the parameters out of the URL
 #if DEBUG
-            string MeetingRoom = "fairshterconferenceroom@olympicmedical.org";
-            DisplayName = "Fairshter Conference Room";
+            string MeetingRoom = "testconferenceroom@contoso.com";
+            DisplayName = "Test Conference Room";
 #else
             string MeetingRoom = Request.Query["meetingroom"].ToString();
             DisplayName = Request.Query["displayname"].ToString();
@@ -97,7 +91,6 @@ namespace ConferenceRooms.Pages
 
             // make a list based on your class in Models
             allMeetings = new List<Meeting>();
-
 
             // Loop thru the events that came back from graph and add the pertinent info to your list allMeetings
             // allMeetings is called from the razor page
@@ -120,9 +113,9 @@ namespace ConferenceRooms.Pages
         {
             //  Set up your auth keys for connecting to MS
             var scopes = new[] { "https://graph.microsoft.com/.default" };
-            var clientId = "5ee5b7fa-94ec-4ab2-886f-ee1e60f96a29";
-            var tenantId = "eadb5e7c-6064-4235-bdb7-5e648530bb77";
-            var clientSecret = "GF+GlAm0j1a4QsOad2wZo/xjoRW2AZ/7NhtIAcgKX60=";
+            var clientId = "yourclientidhere";
+            var tenantId = "yourtenantidhere";
+            var clientSecret = "yourclientsecrethere";
 
             // using Azure.Identity;
             var opts = new ClientSecretCredentialOptions
