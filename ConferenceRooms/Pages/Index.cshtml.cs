@@ -5,9 +5,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Graph;
-using Microsoft.Graph.Auth;
-using Microsoft.Identity.Client;
+//using Microsoft.Graph.Auth;
+//using Microsoft.Identity.Client;
 using ConferenceRooms.Models;
+using Azure.Identity;
+using Microsoft.Data.SqlClient;
+using System.Data;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Configuration;
+
 
 namespace ConferenceRooms.Pages
 {
@@ -25,21 +31,69 @@ namespace ConferenceRooms.Pages
         public string nowday = DateTime.Today.ToString("dddd, MMMM dd, yyyy ");
         public string nowyear = DateTime.Today.ToString("yyyy");
         public string DisplayName { get; set; }
-      
+        public string indexNumber { get; set; }
+        public string TodaysQuote { get; set; }
+        public string TodaysAuthor { get; set; }
+       
+        public int quoteindex()
+        { 
+            // Gotta get a quote
+            TimeSpan tspan = DateTime.Today - new DateTime(1970, 1, 1);
+            // TimeSpan tspan = DateTime.Parse("3/18/2024") - new DateTime(1970, 1, 1);
+            int daysSinceEpoch = (int)tspan.TotalDays;
+            int index = (daysSinceEpoch % 330) + 1;
+            return index;
+        }
+
+        // Get the Quote of The Day from SQLPROD4
+        public (string, string) QOTD()
+        {
+
+            var connectionString = "Server=SQLPROD4;Database=QuoteOfTheDay;User Id=QOTD_reader;password=Wzrkg0}DcbxCjmPt[}0v;Trusted_Connection=False;MultipleActiveResultSets=true;TrustServerCertificate=True;";
+            using SqlConnection connection = new SqlConnection(connectionString);
+            {
+                
+
+                // First command to populate meeting info grid
+
+                using SqlCommand cmd = new SqlCommand("getQuote");
+                {
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("indexNumber", quoteindex().ToString());
+
+                    cmd.Connection = connection;
+                    connection.Open();
+
+                    SqlDataReader quoteDetails = cmd.ExecuteReader();
+                    DataTable datatablequote = new DataTable();
+
+                    datatablequote.Load(quoteDetails);
+
+                    connection.Close();
+                    return (datatablequote.Rows[0][0].ToString(), datatablequote.Rows[0][1].ToString());
+
+                }
+            }
+
+        }
+
+
         public void OnGet()
         {
-        // If it's debug then let's just give it a test conference room
-        // If not then read the parameters out of the URL
+            // If it's debug then let's just give it a test conference room
+            // If not then read the parameters out of the URL
 #if DEBUG
-            string MeetingRoom = "mikesconferenceroom@olympicmedical.org";
-            DisplayName = "Mike E's Conference Room";
+            string MeetingRoom = "fairshterconferenceroom@olympicmedical.org";
+            DisplayName = "Fairshter Conference Room";
 #else
             string MeetingRoom = Request.Query["meetingroom"].ToString();
             DisplayName = Request.Query["displayname"].ToString();
-#endif 
+#endif
+            TodaysQuote = QOTD().Item1;
+            TodaysAuthor = QOTD().Item2;
 
-        // Call the Graph API query.  It's going to return a calendar object
-        var meeting = getUsersAsync(MeetingRoom).GetAwaiter().GetResult();
+            // Call the Graph API query.  It's going to return a calendar object
+            var meeting = getUsersAsync(MeetingRoom).GetAwaiter().GetResult();
 
             // make a list based on your class in Models
             allMeetings = new List<Meeting>();
@@ -65,20 +119,22 @@ namespace ConferenceRooms.Pages
         public async static Task<ICalendarCalendarViewCollectionPage> getUsersAsync(string MeetingRoom)
         {
             //  Set up your auth keys for connecting to MS
+            var scopes = new[] { "https://graph.microsoft.com/.default" };
             var clientId = "5ee5b7fa-94ec-4ab2-886f-ee1e60f96a29";
             var tenantId = "eadb5e7c-6064-4235-bdb7-5e648530bb77";
             var clientSecret = "GF+GlAm0j1a4QsOad2wZo/xjoRW2AZ/7NhtIAcgKX60=";
 
-            // Instantiate the application
-            IConfidentialClientApplication confidentialClientApplication = ConfidentialClientApplicationBuilder
-                .Create(clientId)
-                .WithTenantId(tenantId)
-                .WithClientSecret(clientSecret)
-                .Build();
+            // using Azure.Identity;
+            var opts = new ClientSecretCredentialOptions
+            {
+                AuthorityHost = AzureAuthorityHosts.AzurePublicCloud,
+            };
+                     
+            // https://learn.microsoft.com/dotnet/api/azure.identity.clientsecretcredential
 
-            // Make the Graph client that we'll be querying
-            ClientCredentialProvider authProvider = new ClientCredentialProvider(confidentialClientApplication);
-            GraphServiceClient graphClient = new GraphServiceClient(authProvider);
+            var clientSecretCredential = new ClientSecretCredential(tenantId, clientId, clientSecret, opts);
+
+            var graphClient = new GraphServiceClient(clientSecretCredential, scopes);
 
             // Get a list of calendars for the conference room passed in from onget()
             var calendars = await graphClient
