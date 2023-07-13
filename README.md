@@ -36,7 +36,7 @@ You must create a new enterprise application in MS Entra ID (Azure AD to most of
 but client secret is less steps).  Make sure the application has Calendars.Read for all users and give it administrator consent.  Some guidance can be found here:
 https://learn.microsoft.com/en-us/graph/migrate-azure-ad-graph-configure-permissions?tabs=http%2Cupdatepermissions-azureadgraph-powershell
 Make a note of client secret, client ID, and Tenant ID.
-I had to use microsoft.graph 4.11 as the newer version did not seem to acknowledge ICalendarCalendarViewCollectionPage.  I'll look into this soon.
+I had to use microsoft.graph SDK 4.11 in visual studio as the newer version did not seem to acknowledge ICalendarCalendarViewCollectionPage.  I'll check back into this soon.
 
 ## Deploy Project
 The application should run on an internal IIS server with the current asp.net core server hosting bundle installed.  The app was built against .net core 7.  The only files that should need to be modified
